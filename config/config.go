@@ -58,8 +58,7 @@ func InitFromFile(path string) Config {
 
 	if len(path) == 0 {
 		config = Config{}
-		println("Using default config options.")
-		println()
+		println("Using default config options.\n")
 	} else {
 		config = parseConfig(readConfigFile(path))
 	}
