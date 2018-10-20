@@ -1,5 +1,7 @@
 # MTProto Proxy Exporter
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/Ty3uK/mtproto_proxy_exporter)][goreportcard]
+
 Prometheus exporter for MTProto Proxy Stats. At this moment working only with simple numeric values.
 
 ## Configuration
