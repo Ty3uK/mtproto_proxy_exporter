@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"io/ioutil"
 
 	"gopkg.in/yaml.v2"
@@ -58,7 +59,7 @@ func InitFromFile(path string) Config {
 
 	if len(path) == 0 {
 		config = Config{}
-		println("Using default config options.\n")
+		fmt.Println("Using default config options.\n")
 	} else {
 		config = parseConfig(readConfigFile(path))
 	}

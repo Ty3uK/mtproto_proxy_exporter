@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -40,9 +41,9 @@ func run() {
 }
 
 func initFromConfig() {
-	println("LISTENING ON  :", config.Address)
-	println("SCAN INTERVAL :", config.Interval)
-	println()
+	fmt.Println("LISTENING ON  :", config.Address)
+	fmt.Println("SCAN INTERVAL :", config.Interval)
+	fmt.Println()
 
 	for _, configItem := range config.Metrics {
 		metrics.AddItem(
@@ -51,9 +52,9 @@ func initFromConfig() {
 			configItem.Help,
 		)
 
-		println("FROM MTPROTO  :", configItem.StatName)
-		println("TO PROMETHEUS :", configItem.Name)
-		println()
+		fmt.Println("FROM MTPROTO  :", configItem.StatName)
+		fmt.Println("TO PROMETHEUS :", configItem.Name)
+		fmt.Println()
 	}
 }
 
