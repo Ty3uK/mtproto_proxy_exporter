@@ -60,7 +60,7 @@ func initFromConfig() {
 func main() {
   flag.Parse()
 
-  if *help != false {
+  if *help {
     configPkg.PrintHelp()
     return
   }
