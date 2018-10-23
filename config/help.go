@@ -1,8 +1,12 @@
 package config
 
+import (
+	"fmt"
+)
+
 // PrintHelp displays help message about config file
 func PrintHelp() {
-	println(`
+	fmt.Println(`
 Config file must be written in YAML format and passed through -config option. Example config file file described below.
 
 address:       ":8080"
