@@ -1,6 +1,7 @@
 package stats
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -13,11 +14,11 @@ type Stats struct {
 }
 
 // GetData obtains mtproto_proxy stats data
-func (stats *Stats) GetData(url string) {
+func (stats *Stats) GetData(url string) error {
 	response, err := http.Get(url)
 
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("could not perform http query: %v", err)
 	}
 
 	defer response.Body.Close()
@@ -25,10 +26,11 @@ func (stats *Stats) GetData(url string) {
 	body, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("could not read http response: %v", err)
 	}
 
 	stats.data = strings.Split(string(body), "\n")
+	return nil
 }
 
 // GetNumberItem finds item in mtproto_proxy stats data

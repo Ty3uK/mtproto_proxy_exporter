@@ -28,14 +28,16 @@ var config configPkg.Config
 
 func run() {
 	for {
-		stats.GetData(config.StatsAddress)
-
-		for _, item := range metrics.List {
-			item.SetValue(
-				stats.GetNumberItem(item.StatName),
-			)
+		err := stats.GetData(config.StatsAddress)
+		if err != nil {
+			log.Printf("error: could not get stats data: %v\n", err)
+		} else {
+			for _, item := range metrics.List {
+				item.SetValue(
+					stats.GetNumberItem(item.StatName),
+				)
+			}
 		}
-
 		time.Sleep(time.Duration(config.Interval) * time.Second)
 	}
 }
