@@ -60,7 +60,9 @@ func InitFromFile(path string) (Config, error) {
 		}
 	}
 
-	if config.Interval == 0 {
+	if config.Interval < 0 {
+		return config, fmt.Errorf("scan interval can't be less than or equal to 0")
+	} else if config.Interval == 0 {
 		config.Interval = DefaultInterval
 	}
 
