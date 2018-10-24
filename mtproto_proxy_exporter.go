@@ -68,7 +68,11 @@ func main() {
 		return
 	}
 
-	config = configPkg.InitFromFile(*configPath)
+	var err error
+	config, err = configPkg.InitFromFile(*configPath)
+	if err != nil {
+		log.Fatalf("could not init config from file: %v", err)
+	}
 	initFromConfig()
 
 	http.Handle("/metrics", promhttp.Handler())

@@ -31,37 +31,33 @@ const (
 	DefaultStatsAddress = "http://localhost:2398/stats"
 )
 
-func readConfigFile(path string) []byte {
+func readConfigFile(path string) ([]byte, error) {
 	data, err := ioutil.ReadFile(path)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return []byte(data)
+	return []byte(data), err
 }
 
-func parseConfig(configString []byte) Config {
+func parseConfig(configString []byte) (Config, error) {
 	var config Config
-
 	err := yaml.Unmarshal(configString, &config)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return config
+	return config, err
 }
 
 // InitFromFile initializes config data from file
-func InitFromFile(path string) Config {
+func InitFromFile(path string) (Config, error) {
 	var config Config
 
 	if len(path) == 0 {
 		config = Config{}
 		fmt.Println("Using default config options.\n")
 	} else {
-		config = parseConfig(readConfigFile(path))
+		configData, err := readConfigFile(path)
+		if err != nil {
+			return config, fmt.Errorf("could not read config file \"%s\": %v", path, err)
+		}
+		config, err = parseConfig(configData)
+		if err != nil {
+			return config, fmt.Errorf("could not parse config: %v", err)
+		}
 	}
 
 	if config.Interval == 0 {
@@ -76,5 +72,5 @@ func InitFromFile(path string) Config {
 		config.StatsAddress = DefaultStatsAddress
 	}
 
-	return config
+	return config, nil
 }
