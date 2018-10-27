@@ -7,7 +7,7 @@ import (
 // PrintHelp displays help message about config file
 func PrintHelp() {
 	fmt.Println(`
-Config file must be written in YAML format and passed through -config option. Example config file file described below.
+Config file must be written in YAML format and passed through -config option. Example config file described below.
 
 address:       ":8080"
 stats_address: "http://localhost:2398/stats"
@@ -25,5 +25,5 @@ metrics:
   - stat_name: "uptime"
     name:      "mtproto_proxy_uptime"
     help:      "Uptime"
-  `)
+`)
 }
