@@ -10,9 +10,10 @@ Configuration must be stored in YAML file and passed through `-config` command.
 Sample configuration can be viewed with `-help` command.
 
 ```yaml
-address:       ":8080"
-stats_address: "http://localhost:2398/stats"
-interval:       5
+address:         ":8080"
+stats_address:   "http://localhost:2398/stats"
+interval:        5
+request_timeout: 10
 
 metrics:
   - stat_name: "total_special_connections"

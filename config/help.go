@@ -9,9 +9,10 @@ func PrintHelp() {
 	fmt.Println(`
 Config file must be written in YAML format and passed through -config option. Example config file described below.
 
-address:       ":8080"
-stats_address: "http://localhost:2398/stats"
-interval:       5
+address:         ":8080"
+stats_address:   "http://localhost:2398/stats"
+interval:        5
+request_timeout: 10
 
 metrics:
   - stat_name: "total_special_connections"

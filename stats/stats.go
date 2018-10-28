@@ -6,6 +6,9 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
+
+	"github.com/Ty3uK/mtproto_proxy_exporter/config"
 )
 
 // Stats represents mtproto_proxy stats data
@@ -15,12 +18,19 @@ type Stats struct {
 
 // GetData obtains mtproto_proxy stats data
 func (stats *Stats) GetData(url string) error {
-	response, err := http.Get(url)
-
+	httpClient := http.Client{
+		Timeout: time.Duration(
+			time.Duration(config.Config.RequestTimeout) * time.Second,
+		),
+	}
+	request, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return fmt.Errorf("could not prepare new http request: %v", err)
+	}
+	response, err := httpClient.Do(request)
 	if err != nil {
 		return fmt.Errorf("could not perform http query: %v", err)
 	}
-
 	defer response.Body.Close()
 
 	body, err := ioutil.ReadAll(response.Body)
