@@ -15,11 +15,12 @@ type MetricsConfigItem struct {
 }
 
 // Config represents config file structure
-type Config struct {
-	Address      string              `yaml:"address"`
-	StatsAddress string              `yaml:"stats_address"`
-	Interval     int                 `yaml:"interval"`
-	Metrics      []MetricsConfigItem `yaml:"metrics"`
+var Config struct {
+	Address        string              `yaml:"address"`
+	StatsAddress   string              `yaml:"stats_address"`
+	Interval       int                 `yaml:"interval"`
+	RequestTimeout int                 `yaml:"request_timeout"`
+	Metrics        []MetricsConfigItem `yaml:"metrics"`
 }
 
 const (
@@ -29,6 +30,8 @@ const (
 	DefaultAddress = ":8080"
 	// DefaultStatsAddress represents default value of mtproto_proxy stats URL
 	DefaultStatsAddress = "http://localhost:2398/stats"
+	// DefaultRequestTimeout represents default value of http request timeout in seconds
+	DefaultRequestTimeout = 10
 )
 
 func readConfigFile(path string) ([]byte, error) {
@@ -36,43 +39,44 @@ func readConfigFile(path string) ([]byte, error) {
 	return []byte(data), err
 }
 
-func parseConfig(configString []byte) (Config, error) {
-	var config Config
-	err := yaml.Unmarshal(configString, &config)
-	return config, err
+func parseConfig(configString []byte) error {
+	return yaml.Unmarshal(configString, &Config)
 }
 
 // InitFromFile initializes config data from file
-func InitFromFile(path string) (Config, error) {
-	var config Config
-
+func InitFromFile(path string) error {
 	if len(path) == 0 {
-		config = Config{}
 		fmt.Println("Using default config options.\n")
 	} else {
 		configData, err := readConfigFile(path)
 		if err != nil {
-			return config, fmt.Errorf("could not read config file \"%s\": %v", path, err)
+			return fmt.Errorf("could not read config file \"%s\": %v", path, err)
 		}
-		config, err = parseConfig(configData)
+		err = parseConfig(configData)
 		if err != nil {
-			return config, fmt.Errorf("could not parse config: %v", err)
+			return fmt.Errorf("could not parse config: %v", err)
 		}
 	}
 
-	if config.Interval < 0 {
-		return config, fmt.Errorf("scan interval can't be less than or equal to 0")
-	} else if config.Interval == 0 {
-		config.Interval = DefaultInterval
+	if Config.Interval < 0 {
+		return fmt.Errorf("scan interval can't be less than or equal to 0")
+	} else if Config.Interval == 0 {
+		Config.Interval = DefaultInterval
 	}
 
-	if config.Address == "" {
-		config.Address = DefaultAddress
+	if Config.Address == "" {
+		Config.Address = DefaultAddress
 	}
 
-	if config.StatsAddress == "" {
-		config.StatsAddress = DefaultStatsAddress
+	if Config.StatsAddress == "" {
+		Config.StatsAddress = DefaultStatsAddress
 	}
 
-	return config, nil
+	if Config.RequestTimeout < 0 {
+		return fmt.Errorf("http request timeout can't be less than or equal to 0")
+	} else if Config.RequestTimeout == 0 {
+		Config.RequestTimeout = DefaultRequestTimeout
+	}
+
+	return nil
 }
