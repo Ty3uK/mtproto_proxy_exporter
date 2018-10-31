@@ -17,11 +17,15 @@ import (
 var (
 	configPath = flag.String("config", "", "YML config path")
 	help       = flag.Bool("help", false, "prints help")
+	versionCmd = flag.Bool("version", false, "prints information about version and build")
 
 	stats   = statsPkg.Stats{}
 	metrics = metricsPkg.Metrics{
 		List: make(map[string]metricsPkg.Item),
 	}
+
+	version = "current"
+	build   = "master build"
 )
 
 func run() {
@@ -66,6 +70,11 @@ func initFromConfig() {
 
 func main() {
 	flag.Parse()
+
+	if *versionCmd {
+		config.PrintVersion(version, build)
+		return
+	}
 
 	if *help {
 		config.PrintHelp()

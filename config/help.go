@@ -6,7 +6,7 @@ import (
 
 // PrintHelp displays help message about config file
 func PrintHelp() {
-	fmt.Println(`
+	fmt.Printf(`
 Config file must be written in YAML format and passed through -config option. Example config file described below.
 
 address:         ":8080"
@@ -27,4 +27,9 @@ metrics:
     name:      "mtproto_proxy_uptime"
     help:      "Uptime"
 `)
+}
+
+// PrintVersion displays information about version and build
+func PrintVersion(version, build string) {
+	fmt.Printf("Version : %s\nBuild   : %s\n", version, build)
 }

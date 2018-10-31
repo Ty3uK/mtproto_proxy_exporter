@@ -13,3 +13,7 @@
 
 .DS_Store
 *.sw[pno]
+
+mtproto_proxy_exporter
+mtproto_proxy_exporter_386
+mtproto_proxy_exporter_amd64
