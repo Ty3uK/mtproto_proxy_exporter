@@ -46,7 +46,7 @@ func parseConfig(configString []byte) error {
 // InitFromFile initializes config data from file
 func InitFromFile(path string) error {
 	if len(path) == 0 {
-		fmt.Println("Using default config options.\n")
+		fmt.Println("Using default config options.")
 	} else {
 		configData, err := readConfigFile(path)
 		if err != nil {
