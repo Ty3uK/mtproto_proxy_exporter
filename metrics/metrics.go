@@ -1,6 +1,10 @@
 package metrics
 
-import "github.com/prometheus/client_golang/prometheus"
+import (
+	"fmt"
+
+	"github.com/prometheus/client_golang/prometheus"
+)
 
 // Item represents single metrics item
 type Item struct {
@@ -19,7 +23,7 @@ type Metrics struct {
 }
 
 // AddItem adds new metrics item to list
-func (metric *Metrics) AddItem(statName string, name string, help string) {
+func (metric *Metrics) AddItem(statName string, name string, help string) error {
 	if _, ok := metric.List[name]; ok {
 		prometheus.Unregister(metric.List[name].handler)
 		delete(metric.List, name)
@@ -34,5 +38,10 @@ func (metric *Metrics) AddItem(statName string, name string, help string) {
 			},
 		),
 	}
-	prometheus.Register(metric.List[name].handler)
+
+	if err := prometheus.Register(metric.List[name].handler); err != nil {
+		return fmt.Errorf("could register prometheus handler: %v", err)
+	}
+
+	return nil
 }

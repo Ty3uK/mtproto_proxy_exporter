@@ -41,20 +41,25 @@ func run() {
 }
 
 func initFromConfig() {
-	fmt.Println("LISTENING ON  :", config.Config.Address)
-	fmt.Println("SCAN INTERVAL :", config.Config.Interval)
+	fmt.Println("LISTENING ON    :", config.Config.Address)
+	fmt.Println("SCAN INTERVAL   :", config.Config.Interval)
 	fmt.Println("REQUEST TIMEOUT :", config.Config.RequestTimeout)
 	fmt.Println()
 
 	for _, configItem := range config.Config.Metrics {
-		metrics.AddItem(
+		err := metrics.AddItem(
 			configItem.StatName,
 			configItem.Name,
 			configItem.Help,
 		)
 
-		fmt.Println("FROM MTPROTO  :", configItem.StatName)
-		fmt.Println("TO PROMETHEUS :", configItem.Name)
+		if err != nil {
+			log.Printf("could not add metrics item: %v\n", err)
+			continue
+		}
+
+		fmt.Println("FROM MTPROTO    :", configItem.StatName)
+		fmt.Println("TO PROMETHEUS   :", configItem.Name)
 		fmt.Println()
 	}
 }
